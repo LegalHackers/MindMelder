@@ -2,7 +2,7 @@ MindMelder
 ==========
 
 Syntax to draft contracts with terminal-style commands (think: "style_PromissoryNote" sticks a set of variables into a 
-promissory note template).  This was initially presented by Jonathan Moore and Boris Polonia ([bpolania](https://github.com/bpolania)) at [Code the Deal](http://codethedeal.com).  
+promissory note template).  This was initially presented by Jonathan Moore and Boris Polania ([bpolania](https://github.com/bpolania)) at [Code the Deal](http://codethedeal.com).  
 
 We hope that our members and followers will more fully develop the ontology of the syntax, as well as develop some applications for the final product (how about a GUI?).  We think there are a number of applications for this syntax:
 

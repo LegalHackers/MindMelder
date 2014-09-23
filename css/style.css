@@ -1,0 +1,26 @@
+.target{ 
+        width:500px;
+        height:590px;
+        display: inline-block; 
+        vertical-align:top; 
+        text-align:justify;
+        border:2px solid #006699;
+		margin:0; padding:0;
+		background-color: #fff;
+} 
+
+.tools{ 
+        width:400px;
+        height:590px;
+        display: inline-block; 
+        vertical-align:top; 
+        text-align:justify;
+        border:2px solid #006699;
+		margin:0; padding:0;
+		background-color: #fff;
+
+    } 
+
+p{
+	text-align:center;
+}

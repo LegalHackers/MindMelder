@@ -1,0 +1,364 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
+
+
+<html>
+<body background="images/bg.png">
+	<div>
+	<div id="left-box" style="font-family: Arial, Times, serif; color:white; display: inline-block; width:416; height:50; margin-left:3px; background-color:rgba(255, 255, 255, 0.3); border:2px solid #fff;"></div>
+	<div id="center-box" style="font-family: Arial, Times, serif; color:white; display: inline-block; width:496; height:50; margin-left:5px; background-color:rgba(255, 255, 255, 0.3); border:2px solid #fff;"></div>
+	<div id="right-box" style="font-family: Arial, Times, serif; color:white; display: inline-block; width:395; height:50; margin-left:4px; background-color:rgba(255, 255, 255, 0.3); border:2px solid #fff;"></div>		
+</div>
+	
+<div>	
+    <div style="display: inline-block;">
+    	<textarea class="source" rows="45" cols="80"> 
+		</textarea>
+    </div>	
+	<div class='target' style="display: inline-block;"> 
+	</div>
+	<div class='tools' style="display: inline-block;">
+		<div id="chart" style="margin-left:20px; margin-top:20px;"></div>
+	</div>
+</div>
+
+
+
+</div>
+</body>
+</html>
+
+
+
+
+<script>
+
+//Transforms
+
+        var transform = {'tag':'li','html':'${name} (${value})'};
+    
+		var data_promisory = [
+		    {'name':'Promisory Note','value':'promisory'},
+		    {'name':'Date','value':'today'},
+		    {'name':'amountType','value':'f, v, lv'},
+		    {'name':'amount','value':'any number'},
+		    {'name':'Party','value':'Party in the Contract'},
+		    {'name':'Term 1','value':'Due Date'},
+		    {'name':'Term 2','value':'Maturity Limit'},
+		    {'name':'Signatures','value':'Add as many signatures as you want'},
+		    {'name':'numberOfParties','value':'Number of parties'}
+		];
+
+		var data_commitment = [
+		    {'name':'Promisory Note','value':'promisory'},
+		    {'name':'Date','value':'today'},
+		    {'name':'amountType','value':'f, v, lv'},
+		    {'name':'amount','value':'any number'},
+		    {'name':'Party','value':'Party in the Contract'},
+		    {'name':'Term 1','value':'Due Date'},
+		    {'name':'Term 2','value':'Maturity Limit'},
+		    {'name':'Signatures','value':'Add as many signatures as you want'}
+		];
+
+
+
+
+var styles = [];
+styles.push("The undersigned, for value received, promises to pay to the order of XpartyX (hereinafter called the \"Lender\") the principal sum of Xamount UNITED STATES DOLLARS (US$ Xamount), or such lesser amount as shall equal the outstanding principal amount of all loans made by the Lender (the \"Loans\") to the undersigned, payable on demand by Lender, but in any event not later than Xterm_0X, 2014.  In no event shall the maturity date for any Loan be more than Xterm_1X days after such Loan is made.  The Lender shall have no obligation to make any Loan to the undersigned.");
+
+styles.push("Legal Hackers LLC, (\"Borrower\") promises to pay to the order of [party] (\"Lender\") the principal amount of U.S$Xamount or, if less, the aggregate unpaid principal amount on all loans made by the Lender (the \"Loans\") to Borrower, ON DEMAND, but in any event no later than [term_0], 2014.  Borrower acknowledges that Lender has no obligation to advance any Loan to Borrower.");
+
+var documentsArray = {};
+documentsArray["promisory"] = styles;
+
+styles = [];
+
+styles.push("Re: Borrower: [PARTY]<br>Facilities: Xterm_0X Facility (the \"Revolver\")<br><br>Ladies and Gentlemen:<br><br>We have reviewed the Lender Presentation and Summary of Terms and Conditions for the proposed Xterm_0X Facility for XpartyX . We are pleased to commit $Xamount to the aggregate commitment amount under the Xterm_0X Facility. <br><br><div class='extras' id='nonreliance'>We have made our own independent analysis and decision to enter into this commitment, based on the financial statements of the above [Borrower] and its affiliates and such other documents and information as we have deemed appropriate, without relying on you, any of your affiliates, or any of your or their directors, officers, employees, advisors, attorneys, agents or other representatives.</div><br><br><div class='extras' id='conditions'>Our commitment is subject only to our favorable review of the credit documentation, which shall be based on the terms and conditions set forth in the Summary of Terms and Conditions, and their execution and delivery by all parties thereto</div><br><br><div class='extras' id='no_material_adverse_change'>, and no material adverse change (i) in the financial condition or operations of the Borrower, (ii) in the facts as described in the information provided by you or the Borrower related to the Facility, (iii) in the financial or debt syndication markets. You shall have no obligation to us if this does not occur for any reason.</div><br><br><div class='extras' id='expiration'>Our commitment will expire on Xterm_1X if the transaction has not closed by that date.</div> <br><br><div class='extras' id='fees'>We also understand that as a consideration for our commitment, we will be paid at closing an upfront fee in the amount previously disclosed by you to us and such fees shall not be less than the fees paid to any other bank whose commitment is equal to or less than our commitment.</div>");
+
+styles.push("Legal Hackers LLC, (\"Borrower\") promises to pay to the order of [party] (\"Lender\") the principal amount of U.S$Xamount or, if less, the aggregate unpaid principal amount on all loans made by the Lender (the \"Loans\") to Borrower, ON DEMAND, but in any event no later than [term_0], 2014.  Borrower acknowledges that Lender has no obligation to advance any Loan to Borrower.");
+
+documentsArray["commitment"] = styles;
+
+
+$('<p>Code</p>').appendTo('#left-box');
+$('<p>Document</p>').appendTo('#center-box');
+$('<p>Tools</p>').appendTo('#right-box');
+
+var docType = "";
+var isNewDoc = 0;
+var step = 0;
+var amnt = "Xamount";
+var currency = "Amount"
+var date = today();
+var printed = 0;
+var style = 0;
+var terms = [];
+var party = "XpartyX";
+var body = $('<div/>')
+    .attr("id", "body");
+var type = "";
+
+
+$('.target').append(body);
+$('#body').draggable();
+
+function today() {
+
+	var fullDate = new Date()
+	//convert month to 2 digits
+	var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
+  
+	var currentDate = twoDigitMonth + "/" + fullDate.getDate() + "/" + fullDate.getFullYear();
+	return currentDate;
+}
+
+
+function parseText() {
+
+	var text = $('.source').val();
+	var res = text.split("\n");
+	
+	if (res[0] != "new document") {
+
+				var targetText = ""
+				targetText = targetText + "Bad Syntax"
+				$('.target').val(targetText);
+			
+	} else {
+
+		if (isNewDoc == 0) {
+			var targetText = ""
+			targetText = targetText + "New Document Created"
+			$('.target').append("<p id='titlet'><u>NEW DOCUMENT</u></p>");
+			$('#titlet').draggable();
+			isNewDoc = 1;
+			step++;
+		};
+		
+	    evaluate(res[step]);
+	};
+
+
+}
+
+function evaluate(line) {
+
+	var res = line.split(" ");
+
+	if (res[0] == "set") {
+
+		if (res[1] == "type") {
+
+			if (res[2] == "promisory") {
+				$( "#titlet" ).html("<u>PROMISORY NOTE</u>");
+				$('#chart').json2html(data_promisory, transform);
+				var x = 2;
+				terms[x - 1] = undefined;
+
+			} else if (res[2] == "commitment") {
+				$( "#titlet" ).html("[PARTY]<br>[ADDRESS]");
+				$('#chart').json2html(data_promisory, transform);
+				var x = 2;
+				terms[x - 1] = undefined;
+			}
+
+			type = res[2];
+
+			step++;
+		} else if (res[1] == "amountType") {
+			if (res[2] == "f") {
+				$('.target').append("<div align='left' id='amount'>Amount$:Xamount</div>");
+				$('#amount').draggable();
+				step++;
+			} 
+		} else if (res[1] == "amount") {
+
+			$( "#amount" ).html(currency +  "$:" + res[2]);
+			var styles = documentsArray[type];
+
+			if ($('#p').length < 1) {
+				var r = "\\b(" + amnt + ")\\b";
+				styles[style] = styles[style].replace(new RegExp(r,"g"), res[2]);
+				amnt = res[2];
+				$('.target').append("<div id='p'>" + styles[style] + "</div>");
+				$('#p').draggable();
+			} else {
+				var r = "\\b(" + amnt + ")\\b";
+				var text = $('#p').html();	
+				amnt = res[2];
+				text = text.replace(new RegExp(r,"g"), res[2]);
+				$( "#p" ).html(text);
+				$('#p').draggable();
+			}
+			
+			step++;
+		} else if (res[1] == "currency") {
+			$( "#amount" ).html(currency +  "$:" + res[2]);
+			currency = res[2];
+			step++;
+		} else if (res[1] == "date") {
+			var text = $( ".target" ).html();
+			if (text.indexOf("Date:") ==-1) {
+    			$('.target').append("<div align='right' id='date'>Date:" + today() + "</div>");
+    			$('#date').draggable();
+				step++;
+			} else {
+					if (res[2] == "today") {
+					$( "#date" ).html("Date:" + today());
+					date = today();
+					step++;
+				} else {
+					$( "#date" ).html("Date:" + res[2]);
+					date = today();
+					date = res[2];
+					step++;
+				}
+				
+			}	
+		}  else if (res[1] == "term") {
+			var styles = documentsArray[type];
+			var name = res.slice(3).join();
+			name = name.replace(/,/g, " ");
+			terms[res[2]] = name;
+			var text = styles[style];
+
+			for (var i = terms.length - 1; i >= 0; i--) {
+				if (terms[i] != undefined) {
+					var r = "\\b(" + "Xterm_" + i + "X" + ")\\b";
+					text = text.replace(new RegExp(r,"g"), terms[i]);
+				};	
+			};
+			
+			if ($('#p').length < 1) {
+				$('.target').append("<div id='p'>" + text + "</div>");
+				$('.extras').toggle();
+			} else {
+				$('#p').html(text);
+				$('.extras').toggle();
+				
+			};
+
+			$('#p').draggable();
+
+			step++;
+		} else if (res[1] == "party") {
+			var styles = documentsArray[type];
+			if ($('#p').length < 1) {
+				party = res.slice(2).join();
+				party = party.replace(/,/g, " ");
+				var r = "\\b(" + "XpartyX" + ")\\b";
+				styles[style] = styles[style].replace(new RegExp(r,"g"), party);
+				$('.target').append("<div id='p'>" + styles[style] + "</div>");
+				$('#p').draggable();
+			} else {
+				var text = $('#p').html();
+				var newParty = res.slice(2).join();
+				newParty = newParty.replace(/,/g, " ");
+				var r = "\\b(" + party + ")\\b";
+				text = text.replace(new RegExp(r,"g"), newParty);
+				party = newParty;
+				$( "#p" ).html(text);
+				$('#p').draggable();
+			};
+			
+			step++;
+
+
+		} else if (res[1] == "signature") {
+
+			if (res.length < 4) {
+				if ($('#signature_' + res[2]).length < 1) {
+					$('.target').append("<div id='signature_" + res[2] + "'>By:_____________________</div>");
+					$('#signature_' + res[2]).draggable();
+				} 
+		} else {
+
+			if ($('#signature_' + res[2]).length > 0) {
+				if(res[3] == "name") {
+					if ($('#signature_' + res[2] + " #name").length < 1) {
+						var name = res.slice(4).join();
+						name = name.replace(/,/g, " ");
+						$('#signature_' + res[2]).append("<div id='name'>Name:" + name + "</div>");
+					} else {
+						var name = res.slice(4).join();
+						name = name.replace(/,/g, " ");
+						$('#signature_' + res[2] + " #name").html("<div id='name'>Name:" + name + "</div>");
+					}
+					
+				} else if(res[3] == "company") {
+					if ($('#signature_' + res[2] + " #company").length < 1) {
+						var title = res.slice(4).join();
+						title = title.replace(/,/g, " ");
+						$('#signature_' + res[2]).append("<div id='company'>company:" + title + "</div>");
+					} else {
+						var title = res.slice(4).join();
+						title = title.replace(/,/g, " ");
+						$('#signature_' + res[2] + " #company").html("<div id='company'>company:" + title + "</div>");
+					}
+					
+				}
+				
+			} else {
+				var text = $('#p').html();
+				var newParty = res.slice(2).join();
+				newParty = newParty.replace(/,/g, " ");
+				text = text.replace(party, newParty);
+				party = newParty;
+				$( "#p" ).html(text);
+				$('#p').draggable();
+			};
+
+		};
+			
+			
+			step++;
+
+
+		} else if (res[1] == "addressee") {
+
+			$('.target').append("<div id='addressee' align='left'>[PARTY]<br>[ADDRESS]</div>");
+			$('#addressee').draggable();
+
+		} else if (res[1] == "provision") {
+			$('#' + res[2]).toggle();
+			step++;
+
+		} else {
+			step++;
+		};
+	} else if (res[0] == "change") {
+		var styles = documentsArray[type];
+		var d = $("#date");
+		var a = $("#amount");
+		var t = $("#titlet");
+		$('.target').empty();
+		$('.target').append(t);
+		$('.target').append(a);
+		$('.target').append(d);
+		styles[style + 1] = styles[style + 1].replace("Xamount", amnt);
+		styles[style + 1] = styles[style + 1].replace("[party]", party);
+		for (var i in terms) {
+			styles[style + 1] = styles[style + 1].replace("[term_" + i + "]", terms[i]);
+		}
+		$('.target').append(styles[style + 1]);
+		step++;
+	};
+}
+
+$(document).keypress(function(e) {
+    if(e.which == 13) {
+        parseText()
+    }
+});
+
+$(".target").bind('change keyup', function(){ 
+  	
+  });
+$
+
+	
+</script>
+
